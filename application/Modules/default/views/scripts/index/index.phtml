@@ -1,0 +1,60 @@
+<?php
+function russian_month($timestamp){
+    $date=explode(".", date("d.m.Y",$timestamp));
+    switch ($date[1]){
+        case 1: $m='января'; break;
+        case 2: $m='февраля'; break;
+        case 3: $m='марта'; break;
+        case 4: $m='апреля'; break;
+        case 5: $m='мая'; break;
+        case 6: $m='июня'; break;
+        case 7: $m='июля'; break;
+        case 8: $m='августа'; break;
+        case 9: $m='сентября'; break;
+        case 10: $m='октября'; break;
+        case 11: $m='ноября'; break;
+        case 12: $m='декабря'; break;
+    }
+    echo $date[0].'&nbsp;'.$m.'&nbsp;'.$date[2];
+}
+?>
+<div id="current">
+    <img src="<?=Zend_Registry::get('config')->path->upload?>/<?=$this->currentMagazine['preview_img']?>" alt="" border="0" />
+    <div id="about">
+        <div class="factor"><span class="green">FX</span> <span class="black">FACTOR</span> - это Журнал о бизнесе нового поколения</div>
+        <a class="read fr" href="/"></a>
+        <a class="download fr" href="/"></a>
+        <div class="clear"></div>
+        <ul class="data">
+            <li><span></span>Выпуск: <span class="black">№<?=$this->currentMagazine['number'];?></span></li>
+            <li class="w1">Дата выхода:<br/>
+                <span class="black"><?=russian_month($this->currentMagazine['publish_date'])?> г.</span>
+            </li>
+            <li class="w1">Тираж:<br/>
+                <span class="black"><?=$this->currentMagazine['printing'];?></span>
+            </li>
+        </ul>
+
+    </div><!--/about-->
+    <div id="in-this">
+        в этом номере
+    </div>
+    <div class="clear"></div>
+    <ul id="cont">
+        <?php foreach($this->previews as $key=>$value): ?>
+            <? if ($key == 0) $class = 'b-r'; ?>
+            <? if ($key == 1) $class = 'b-l b-r'; ?>
+            <? if ($key == 2) $class = 'b-r'; ?>
+        <li class="<?=$class?>">
+            <div style="margin:0 auto; width:205px" class="">
+                <b><?=$value['preview_quote']?></b>
+                <img src="<?=Zend_Registry::get('config')->path->upload?>/<?=$value['preview_image']?>" alt="" border="0" />
+                <p>
+                    <?=$value['preview_text']?>
+                </p>
+                <a href="/" class="read-b fr"></a>
+            </div>
+        </li>
+        <?php endforeach; ?>
+    </ul>
+</div><!--/current-->

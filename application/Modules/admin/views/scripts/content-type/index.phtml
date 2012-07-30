@@ -1,0 +1,17 @@
+<h2>Список типов материалов</h2>
+<a href="/admin/content-type/add">Добавить новый тип материала</a>
+<ul id='content-type-list'>
+<?php
+    foreach ($this->listContentType as $value)
+    {
+        echo '<li id="content-type-'.$value->id.'">
+                <span class="title">'.$value->title.'<span>
+                <span class="description">'.$value->description.'</span>
+                <span class="action">
+                    <a href="/admin/content-type/delete?'.$value->id.'">Удалить</a>
+                    <a href="/admin/content-type/edit?'.$value->id.'">Редактировать</a>
+                </span>
+            </li>';
+    }
+?>
+</ul>

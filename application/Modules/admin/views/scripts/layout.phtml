@@ -1,0 +1,10 @@
+<?php  echo $this->doctype(); ?>
+<html>
+<head>
+    <?php echo $this->headTitle(); ?>
+    <?php echo $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8'); ?>
+    <?php echo $this->headScript()->prependFile('http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js', 'text/javascript'); ?>
+</head>
+<body>
+    <?php echo $this->layout()->content; ?>
+</body>

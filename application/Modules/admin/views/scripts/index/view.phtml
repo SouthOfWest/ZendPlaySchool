@@ -1,0 +1,172 @@
+<script type="text/javascript">
+
+//-- Main method, render all UI
+Ext.onReady(function() {
+    Ext.BLANK_IMAGE_URL = '/js/ext-3.3.2/resources/images/default/s.gif';
+    Ext.QuickTips.init();
+
+    var cp = new Ext.ux.state.LocalStorage();
+    Ext.state.Manager.setProvider(cp);
+
+    // Возможность выделения текста в гридах
+    if (!Ext.grid.GridView.prototype.templates) {
+        Ext.grid.GridView.prototype.templates = {};
+    }
+
+    Ext.grid.GridView.prototype.templates.cell = new Ext.Template(
+        '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} x-selectable {css}" style="{style}" tabIndex="0" {cellAttr}>',
+        '<div class="x-grid3-cell-inner x-grid3-col-{id}" {attr}>{value}</div>',
+        '</td>'
+    );
+    df = new Date();
+    // Основная панель, отображающая реакцию на какое либо действие :)
+    var contentPanel = new Ext.Panel({
+        header: false,
+        id: 'content-panel',
+        region:'center',
+        xtype: 'panel',
+        margins: '2 2 2 2',
+        border:false,
+        layout: 'fit',
+        items:[
+            {
+                xtype:'statefultabpanel',
+                id:'tab-panel',
+                enableTabScroll:true,
+                activeTab:0,
+                stateful: true,
+                stateId: 'main-tab-panel',
+                stateEvents: ['add', 'remove'],
+                defaults:{autoScroll:true},
+                items:[
+                ]
+            }
+        ]
+    });
+
+  var otherMenuItems = eval('['+'<?php echo $this->otherMenu; ?>'+']');
+  var userMenuItems = eval('['+'<?php echo $this->userMenu; ?>'+']');
+  var magazineMenuItems = eval('['+'<?php echo $this->magazineMenu; ?>'+']');
+
+    var menuPanel = new Ext.Panel({
+        region: 'north',
+        id: 'menu-panel',
+        border: false,
+        header: false,
+        tbar: [
+            {
+                text: 'Работа с пользователями',
+                stateId: 'user-stateId',
+                iconCls: 'migration-menu-icon',
+                style: 'marginLeft: 5px',
+                menu: [
+                    userMenuItems
+                ]
+            },
+            {
+                text: 'Журналы',
+                stateId: 'magazine-stateId',
+                iconCls: 'stat-tab-icon',
+                style: 'marginLeft: 10px',
+                menu: [
+                    magazineMenuItems
+                ]
+            },
+            {
+                text: 'Прочее',
+                stateId: 'setting-stateId',
+                iconCls: 'settings-menu-icon',
+                style: 'marginLeft: 10px',
+                menu: [
+                    otherMenuItems
+                ]
+            }
+        ]
+    });
+    try {
+        //Основной контейнер для панели и контента
+        var viewport = new Ext.Viewport({
+            layout: 'border',
+            renderTo: Ext.getBody(),
+            items: [menuPanel, contentPanel]
+        });
+    } catch(exception) {
+    }
+
+    var handlersData = {
+        //handlers data
+        'get-menu-items': {
+            title:'Пункты меню',  iconCls:'stat-tab-icon', xtype:'menu-grid', closable:true
+        },
+        'get-clean-url': {
+            title:'Чистые ссылки (pro)',  iconCls:'stat-tab-icon', xtype:'clean-url-grid', closable:true
+        },
+        'get-tellme-list': {
+            title:'Сообщить мне',  iconCls:'stat-tab-icon', xtype:'tellme-grid', closable:true
+        },
+        'get-consulting-items': {
+            title:'Консультации',  iconCls:'stat-tab-icon', xtype:'consult-grid', closable:true
+        },
+        'get-subscription-items': {
+            title:'Подписка',  iconCls:'stat-tab-icon', xtype:'subscription-grid', closable:true
+        },
+        'get-partners-list': {
+            title:'Партнеры',  iconCls:'stat-tab-icon', xtype:'partners-grid', closable:true
+        },
+        'get-pages-list': {
+            title:'Статические страницы',  iconCls:'stat-tab-icon', xtype:'pages-grid', closable:true
+        },
+        'get-banner-list': {
+            title:'Баннеры',  iconCls:'stat-tab-icon', xtype:'banner-grid', closable:true
+        },
+        'get-poll-list': {
+            title:'Опросы',  iconCls:'stat-tab-icon', xtype:'poll-grid', closable:true
+        },
+        'get-magazine-list': {
+            title:'Журналы',  iconCls:'stat-tab-icon', xtype:'magazine-grid', closable:true
+        },
+        'get-magazine-previews-list': {
+            title:'Анонсы к журналам',  iconCls:'stat-tab-icon', xtype:'magazine-previews-grid', closable:true
+        }
+    }
+
+      // e - is evented element
+    function doAction(e, t) {
+        var tab = Ext.getCmp('tab-panel');
+
+        if (handlersData[e.id] === undefined) {
+            Ext.Msg.show({
+                title: 'Предупреждение',
+                msg: 'Обработчик не зарегистрирован!',
+                buttons: Ext.Msg.OK,
+                icon: Ext.Msg.INFO
+            });
+            e.stopEvent();
+            return true;
+        } else if(e.id == 'action-transactions') {
+            try {
+                var xtype = 'transactions-panel';
+                var activated = false;
+                for (var index = 0; index < tab.items.items.length; index++) {
+                    if (tab.items.items[index].xtype == xtype) {
+                        activated = true;
+                        tab.setActiveTab(index);
+                    }
+                }
+                if (!activated) {
+                    tab.add(handlersData[e.id]).show();
+                }
+            } catch(exception) {
+            }
+        } else {
+            tab.add(handlersData[e.id]).show();
+        }
+    }
+    // Just for development and test mode
+    if (Ext.util.Cookies.get('debug_mode') == 'ya_ya') {
+        Ext.getCmp('tab-panel').setActiveTab(1);
+    }
+});
+</script>
+<div id="hidden_cache" style="display: none;"></div>
+<div id="menu-items"></div>

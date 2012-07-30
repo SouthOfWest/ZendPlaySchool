@@ -1,0 +1,19 @@
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8'); ?>
+        <?php echo $this->headLink()->appendStylesheet($this->config()->url->base . '/public/css/base.css');?>
+        <?php echo $this->headScript()->prependFile($this->config()->url->base . '/public/js/main.js', 'text/javascript')
+                                      ->prependFile($this->config()->url->base . '/public/js/jquery-1.4.4.js', 'text/javascript'); ?>
+        <?=$this->partial('googleAnalytics.phtml');?>
+    </head>
+    <body>
+        <?=$this->partial('yandexMetrica.phtml');?>
+        <div id="menu"> <?php echo $this->navigation()->menu($this->menu); ?></div>
+        <div id='page'>
+            <h1>Неплохо определится бы с фоном сайта, мне так нравятся вот такие текстуры. Что тебе нравится =) ?</h1>
+            <?=$this->background()?>
+        </div>
+    </body>
+</html>
